@@ -1,2 +1,5 @@
 - Install Gin
   - `go get -u github.com/gin-gonic/gin`
+- Install Gorm & Mysql Driver
+  - `go get -u gorm.io/gorm`
+  - `go get -u gorm.io/driver/mysql`
