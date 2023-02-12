@@ -39,7 +39,6 @@ func main() {
 }
 
 func handler(c *gin.Context) {
-	// refer https://github.com/go-sql-driver/mysql#dsn-data-source-name for details
 	dsn := "root:@tcp(127.0.0.1:3306)/golang_crowdfunding?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
@@ -54,4 +53,9 @@ func handler(c *gin.Context) {
 	db.Find(&users)
 
 	c.JSON(http.StatusOK, users)
+
+	// Handler
+	// Service
+	// Repository
+	// DB
 }
