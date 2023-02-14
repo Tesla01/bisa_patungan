@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"tesla01/bisa_patungan/helper"
 	"tesla01/bisa_patungan/user"
 )
 
@@ -31,6 +32,7 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, nil)
 	}
+	response := helper.APIResponse("Account has been registered", http.StatusOK, "success", user)
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, response)
 }
