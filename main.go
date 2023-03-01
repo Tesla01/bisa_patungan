@@ -5,6 +5,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
+	"net/http"
 	"tesla01/bisa_patungan/handler"
 	"tesla01/bisa_patungan/user"
 )
@@ -26,6 +27,9 @@ func main() {
 	userHandler := handler.NewUserHandler(userService)
 
 	router := gin.Default()
+
+	router.GET("api/check-health", healthCheck)
+
 	api := router.Group("/api/v1")
 
 	api.POST("/users", userHandler.RegisterUser)
@@ -35,4 +39,15 @@ func main() {
 
 	router.Run(":9001")
 
+}
+
+type Response struct {
+	Message string
+}
+
+func healthCheck(c *gin.Context) {
+	respons := Response{
+		Message: "OK",
+	}
+	c.JSON(http.StatusOK, respons)
 }
