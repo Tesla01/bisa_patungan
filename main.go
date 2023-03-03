@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ import (
 
 func main() {
 
-	dsn := "root:example@tcp(127.0.0.1:3306)/golang_crowdfunding?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:@tcp(127.0.0.1:3306)/golang_crowdfunding?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
@@ -41,6 +42,10 @@ func main() {
 	api.POST("/email_checker", userHandler.CheckEmailAvailability)
 	api.POST("/avatars", userHandler.UploadAvatar)
 
-	router.Run(":9001")
+	err = router.Run(":8080")
+	if err != nil {
+		fmt.Println("Error Start Server")
+		return
+	}
 
 }
