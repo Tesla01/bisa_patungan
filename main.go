@@ -6,6 +6,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
+	"tesla01/bisa_patungan/auth"
 	"tesla01/bisa_patungan/handler"
 	"tesla01/bisa_patungan/user"
 	"tesla01/bisa_patungan/utility"
@@ -23,13 +24,13 @@ func main() {
 	userRepository := user.NewRepository(db)
 	utilityRepository := utility.NewRepository()
 
+	// Service
 	userService := user.NewService(userRepository)
 	utilityService := utility.NewService(utilityRepository)
+	authService := auth.NewService()
 
-	//Test
-	userService.SaveAvatar(1, "images/1-profile.png")
-
-	userHandler := handler.NewUserHandler(userService)
+	//Handler
+	userHandler := handler.NewUserHandler(userService, authService)
 	utilityHandler := handler.NewUtilityHandler(utilityService)
 
 	router := gin.Default()
