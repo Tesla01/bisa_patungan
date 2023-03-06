@@ -9,16 +9,16 @@ import (
 	"tesla01/bisa_patungan/user"
 )
 
-type userHandler struct {
+type UserHandler struct {
 	userService user.Service
 	authService auth.Service
 }
 
-func NewUserHandler(userService user.Service, authService auth.Service) *userHandler {
-	return &userHandler{userService, authService}
+func NewUserHandler(userService user.Service, authService auth.Service) *UserHandler {
+	return &UserHandler{userService, authService}
 }
 
-func (h *userHandler) RegisterUser(c *gin.Context) {
+func (h *UserHandler) RegisterUser(c *gin.Context) {
 	// Input from user
 	// Map to user struct
 	// Save to DB
@@ -61,7 +61,7 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (h *userHandler) Login(c *gin.Context) {
+func (h *UserHandler) Login(c *gin.Context) {
 
 	var input user.LoginInput
 
@@ -101,7 +101,7 @@ func (h *userHandler) Login(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (h *userHandler) CheckEmailAvailability(c *gin.Context) {
+func (h *UserHandler) CheckEmailAvailability(c *gin.Context) {
 	var input user.CheckEmailInput
 
 	err := c.ShouldBindJSON(&input)
@@ -137,7 +137,7 @@ func (h *userHandler) CheckEmailAvailability(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (h *userHandler) UploadAvatar(c *gin.Context) {
+func (h *UserHandler) UploadAvatar(c *gin.Context) {
 	file, err := c.FormFile("avatar")
 	if err != nil {
 		data := gin.H{"is_uploaded": false}
@@ -147,7 +147,8 @@ func (h *userHandler) UploadAvatar(c *gin.Context) {
 	}
 
 	// Get from JWT
-	userID := 1
+	currentUser := c.MustGet("currentUser").(user.User)
+	userID := currentUser.ID
 	path := fmt.Sprintf("images/%d-%s", userID, file.Filename)
 
 	err = c.SaveUploadedFile(file, path)
