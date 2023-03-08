@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"strings"
 	"tesla01/bisa_patungan/auth"
+	"tesla01/bisa_patungan/campaign"
 	"tesla01/bisa_patungan/handler"
 	"tesla01/bisa_patungan/helper"
 	"tesla01/bisa_patungan/user"
@@ -25,8 +26,25 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
+	// Repository
 	userRepository := user.NewRepository(db)
+	campaignRepository := campaign.NewRepository(db)
 	utilityRepository := utility.NewRepository()
+
+	listCampaign, err := campaignRepository.FindAll()
+	campaign1, err := campaignRepository.FindByUserID(1)
+
+	if err != nil {
+		fmt.Println("error")
+	}
+
+	for _, c := range listCampaign {
+		fmt.Println(c
+
+		)
+	}
+
+	fmt.Println(campaign1)
 
 	// Service
 	userService := user.NewService(userRepository)
