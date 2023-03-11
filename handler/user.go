@@ -19,10 +19,6 @@ func NewUserHandler(userService user.Service, authService auth.Service) *UserHan
 }
 
 func (h *UserHandler) RegisterUser(c *gin.Context) {
-	// Input from user
-	// Map to user struct
-	// Save to DB
-
 	var input user.RegisterUserInput
 
 	err := c.ShouldBindJSON(&input)

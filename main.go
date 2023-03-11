@@ -37,17 +37,9 @@ func main() {
 	utilityService := utility.NewService(utilityRepository)
 	authService := auth.NewService()
 
-	campaigns, err := campaignService.FindCampaigns(8)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println("Debug")
-	fmt.Println(len(campaigns))
-
 	//Handler
 	userHandler := handler.NewUserHandler(userService, authService)
+	campaignHandler := handler.NewCampaignHandler(campaignService)
 	utilityHandler := handler.NewUtilityHandler(utilityService)
 
 	router := gin.Default()
@@ -55,11 +47,15 @@ func main() {
 	api := router.Group("/api/v1")
 
 	//Place Middleware after path
+	// Util
 	api.GET("/check", utilityHandler.CheckHealth)
+	// User
 	api.POST("/users", userHandler.RegisterUser)
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/email_checker", userHandler.CheckEmailAvailability)
 	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar)
+	// Campaign
+	api.GET("/campaigns", campaignHandler.GetCampaigns)
 
 	err = router.Run(":8080")
 	if err != nil {
