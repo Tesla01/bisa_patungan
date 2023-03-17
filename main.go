@@ -13,6 +13,7 @@ import (
 	"tesla01/bisa_patungan/campaign"
 	"tesla01/bisa_patungan/handler"
 	"tesla01/bisa_patungan/helper"
+	"tesla01/bisa_patungan/transaction"
 	"tesla01/bisa_patungan/user"
 	"tesla01/bisa_patungan/utility"
 )
@@ -29,17 +30,20 @@ func main() {
 	// Repository
 	userRepository := user.NewRepository(db)
 	campaignRepository := campaign.NewRepository(db)
+	transactionRepository := transaction.NewRepository(db)
 	utilityRepository := utility.NewRepository()
 
 	// Service
 	userService := user.NewService(userRepository)
 	campaignService := campaign.NewService(campaignRepository)
+	transactionService := transaction.NewService(transactionRepository)
 	utilityService := utility.NewService(utilityRepository)
 	authService := auth.NewService()
 
 	//Handler
 	userHandler := handler.NewUserHandler(userService, authService)
 	campaignHandler := handler.NewCampaignHandler(campaignService)
+	transactionHandler := handler.NewTransactionHandler(transactionService)
 	utilityHandler := handler.NewUtilityHandler(utilityService)
 
 	router := gin.Default()
@@ -61,6 +65,8 @@ func main() {
 	api.POST("/campaigns", authMiddleware(authService, userService), campaignHandler.CreateCampaign)
 	api.PUT("/campaigns/:id", authMiddleware(authService, userService), campaignHandler.UpdateCampaign)
 	api.POST("/campaigns-images", authMiddleware(authService, userService), campaignHandler.UploadImage)
+	// Transaction
+	api.GET("/campaigns/:id/transactions", authMiddleware(authService, userService), transactionHandler.GetCampaignTransactions)
 
 	err = router.Run(":9000")
 	if err != nil {
