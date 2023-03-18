@@ -20,7 +20,7 @@ import (
 
 func main() {
 
-	dsn := "root:example@tcp(127.0.0.1:3306)/golang_crowdfunding?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:@tcp(127.0.0.1:3306)/golang_crowdfunding?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
@@ -36,7 +36,7 @@ func main() {
 	// Service
 	userService := user.NewService(userRepository)
 	campaignService := campaign.NewService(campaignRepository)
-	transactionService := transaction.NewService(transactionRepository)
+	transactionService := transaction.NewService(transactionRepository, campaignRepository)
 	utilityService := utility.NewService(utilityRepository)
 	authService := auth.NewService()
 

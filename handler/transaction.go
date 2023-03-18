@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"tesla01/bisa_patungan/helper"
 	"tesla01/bisa_patungan/transaction"
+	"tesla01/bisa_patungan/user"
 )
 
 type transactionHandler struct {
@@ -26,10 +27,13 @@ func (h *transactionHandler) GetCampaignTransactions(c *gin.Context) {
 		return
 	}
 
+	currentUser := c.MustGet("currentUser").(user.User)
+	input.User = currentUser
+
 	transactions, err := h.service.GetTransactionByCampaignID(input)
 
 	if err != nil {
-		response := helper.APIResponse("Failed to get campaign transactions", http.StatusBadRequest, "error", nil)
+		response := helper.APIResponse("Failed to get campaign transactions, not authorized user", http.StatusBadRequest, "error", nil)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
