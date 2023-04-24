@@ -67,6 +67,7 @@ func main() {
 	api.POST("/campaigns-images", authMiddleware(authService, userService), campaignHandler.UploadImage)
 	// Transaction
 	api.GET("/campaigns/:id/transactions", authMiddleware(authService, userService), transactionHandler.GetCampaignTransactions)
+	api.GET("/transactions", authMiddleware(authService, userService), transactionHandler.GetUserTransactions)
 
 	err = router.Run(":9000")
 	if err != nil {
