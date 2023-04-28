@@ -13,6 +13,7 @@ import (
 	"tesla01/bisa_patungan/campaign"
 	"tesla01/bisa_patungan/handler"
 	"tesla01/bisa_patungan/helper"
+	"tesla01/bisa_patungan/payment"
 	"tesla01/bisa_patungan/transaction"
 	"tesla01/bisa_patungan/user"
 	"tesla01/bisa_patungan/utility"
@@ -36,7 +37,8 @@ func main() {
 	// Service
 	userService := user.NewService(userRepository)
 	campaignService := campaign.NewService(campaignRepository)
-	transactionService := transaction.NewService(transactionRepository, campaignRepository)
+	paymentService := payment.NewService()
+	transactionService := transaction.NewService(transactionRepository, campaignRepository, paymentService)
 	utilityService := utility.NewService(utilityRepository)
 	authService := auth.NewService()
 
