@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -49,6 +50,7 @@ func main() {
 	utilityHandler := handler.NewUtilityHandler(utilityService)
 
 	router := gin.Default()
+	router.Use(cors.Default())
 	router.Static("/images", "./images")
 
 	api := router.Group("/api/v1")
