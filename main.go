@@ -84,6 +84,10 @@ func main() {
 
 	port := helper.GetEnvVariable("APP_PORT")
 
+	if port == "" {
+		port = "9000"
+	}
+
 	err = router.Run(":" + port)
 	if err != nil {
 		fmt.Println("Error Start Server")
