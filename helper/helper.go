@@ -1,7 +1,6 @@
 package helper
 
 import (
-	"fmt"
 	"github.com/go-playground/validator/v10"
 	"github.com/joho/godotenv"
 	"os"
@@ -43,11 +42,11 @@ func FormatValidationError(err error) []string {
 	return errors
 }
 
-func GetEnvVariable(key string) string {
+func GetEnvVariable(key string, defaultValue string) string {
 	err := godotenv.Load()
 
 	if err != nil {
-		fmt.Println("No ENV File")
+		_ = os.Setenv(key, defaultValue)
 	}
 
 	return os.Getenv(key)

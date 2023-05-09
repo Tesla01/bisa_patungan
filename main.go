@@ -22,11 +22,11 @@ import (
 
 func main() {
 
-	dbHost := helper.GetEnvVariable("DB_HOST")
-	dbPort := helper.GetEnvVariable("DB_PORT")
-	dbUsername := helper.GetEnvVariable("DB_USERNAME")
-	dbPassword := helper.GetEnvVariable("DB_PASSWORD")
-	dbDatabase := helper.GetEnvVariable("DB_DATABASE")
+	dbHost := helper.GetEnvVariable("DB_HOST", "localhost")
+	dbPort := helper.GetEnvVariable("DB_PORT", "3306")
+	dbUsername := helper.GetEnvVariable("DB_USERNAME", "root")
+	dbPassword := helper.GetEnvVariable("DB_PASSWORD", "")
+	dbDatabase := helper.GetEnvVariable("DB_DATABASE", "golang_crowdfunding")
 
 	dsn := dbUsername + ":" + dbPassword + "@tcp(" + dbHost + ":" + dbPort + ")/" + dbDatabase + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
@@ -82,7 +82,7 @@ func main() {
 	api.POST("/transactions", authMiddleware(authService, userService), transactionHandler.CreateTransaction)
 	api.POST("/transactions/notifications", transactionHandler.GetNotification)
 
-	port := helper.GetEnvVariable("APP_PORT")
+	port := helper.GetEnvVariable("APP_PORT", "9000")
 
 	err = router.Run(":" + port)
 	if err != nil {
